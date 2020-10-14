@@ -1,0 +1,4 @@
+dependencies {
+    compile project(':order')
+    compile project(':agreg')
+}

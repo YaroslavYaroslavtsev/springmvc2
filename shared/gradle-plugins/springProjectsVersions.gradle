@@ -1,0 +1,25 @@
+/*
+ Скриптовый плагин (script plugin), позволяющий задавать версии проектов Spring
+ */
+
+/**
+ * Расширение используется, чтобы не пихать всё в стандартный ext.
+ * Там где будут использоваться переменные, будет видно, что применяется кастомный Extension, а значит версии заданы извне.
+ */
+class SpringProjectsVersionsExtension {
+    String springBootVersion
+    String springCloudVersion
+    String springBootAdminVersion
+
+    SpringProjectsVersionsExtension(String springBootVersion, String springCloudVersion, String springBootAdminVersion) {
+        this.springBootVersion = springBootVersion
+        this.springCloudVersion = springCloudVersion
+        this.springBootAdminVersion = springBootAdminVersion
+    }
+}
+
+project.extensions.create('versions', SpringProjectsVersionsExtension, "2.2.3.RELEASE", "Hoxton.RELEASE", "2.2.0")
+
+println "springBootVersion = $versions.springBootVersion"
+println "springCloudVersion = $versions.springCloudVersion"
+println "springBootAdminVersion = $versions.springBootAdminVersion"

@@ -1,0 +1,112 @@
+//<editor-fold desc="Конфигурация корневого скрипта сборки">
+buildscript {
+    // Указание версий springBootVersion и springCloudVersion
+    apply from: 'shared/gradle-plugins/springProjectsVersions.gradle'
+    repositories {
+        mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+
+    dependencies {
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: versions.springBootVersion
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.2.3"
+    }
+}
+//</editor-fold>
+
+//<editor-fold desc="Конфигурация всех модулей проекта, включая корневой проект и разделяемую библиотеку shared">
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'idea'                                // Для правильного формирования модулей в IDEA
+    apply plugin: 'jacoco'                              // Для сбора данных о покрытии кода тестами
+    apply plugin: 'org.springframework.boot'            // Для поддержки сборки Spring Boot приложений
+
+    //<editor-fold desc="Подсказки компилятору">
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+    //</editor-fold>
+
+    //<editor-fold desc="Настройки проекта в IDEA">
+    idea {
+        module {
+            excludeDirs += files('work', 'log', '.idea')
+        }
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Зависимости собираемого компонента">
+    repositories {
+        mavenCentral()
+    }
+
+    // Здесь находятся общие для всех тестовые зависимости.
+    // В shared они не могут находиться из-за особенности gradle,
+    // не позволяющей транзитивно подтягивать зависимости, используя compile project
+    dependencies {
+        // Указание координат (platform) для авто-подстановки версий компонентов Spring Boot и не только
+        implementation platform("org.springframework.boot:spring-boot-dependencies:${versions.springBootVersion}")
+        // Указание координат (platform) для авто-подстановки версий компонентов Spring Cloud
+        implementation platform("org.springframework.cloud:spring-cloud-dependencies:${versions.springCloudVersion}")
+        // Указание координат для авто-подстановки версий компонентов, указанных через annotationProcessor
+        annotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${versions.springBootVersion}")
+        testAnnotationProcessor platform("org.springframework.boot:spring-boot-dependencies:${versions.springBootVersion}")
+
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    //    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.session:spring-session-core'
+
+        implementation 'org.webjars:jquery:3.5.1'
+        implementation 'org.webjars:bootstrap:4.5.2'
+        implementation 'org.webjars:bootstrap-datetimepicker:2.4.4'
+        implementation 'org.webjars:momentjs:2.24.0'
+        implementation 'org.webjars:font-awesome:4.7.0'
+        implementation 'org.webjars:webjars-locator:0.36'
+
+        // Lombok
+        compileOnly group: 'org.projectlombok', name: 'lombok'
+        annotationProcessor group: 'org.projectlombok', name: 'lombok'
+
+        // Не хотим тянуть в classpath старьё
+        configurations {
+            compileOnly.exclude group: "commons-lang", module: "commons-lang"
+            compileOnly.exclude group: "commons-collections", module: "commons-collections"
+        }
+
+        testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test'
+        // API для написания тестов и движок для запуска
+        testCompile group: 'org.junit.jupiter', name: 'junit-jupiter'
+
+        // Если нужна общая для всех микросервисов НЕ тестовая зависимость, то добавлять ее нужно в shared/build.gradle.
+    }
+    //</editor-fold>
+
+    tasks.withType(Test) {
+        // По умолчанию поддержка JUnit5 тестов выключена, поэтому включаем её явно
+        useJUnitPlatform()
+    }
+
+    springBoot { buildInfo() }
+}
+//</editor-fold>
+
+bootJar {
+    /* Корневой проект не предназначен для выпуска в виде дистрибутива, поэтому соответствующая задача в нем должна
+    быть явно отключена. */
+    enabled = false
+}
+
+//<editor-fold desc="Конфигурация всех проектов, кроме корневого и подпроектов shared">
+configure(subprojects.findAll { it.name == 'shared' || !it.path.contains('shared') }) {
+
+}
+
+configure(subprojects.findAll { !it.path.contains('shared') }) {
+
+}

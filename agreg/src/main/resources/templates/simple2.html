@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<html lang="ru">
+
+<head th:replace="fragments/header.html :: header">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="/resources/favicon.ico"/>
+    <!--    <link rel="stylesheet" href="/resources/css/main.css">-->
+    <link rel="stylesheet" href="/webjars/bootstrap/css/bootstrap.min.css"/>
+<!--    <link rel="stylesheet" href="/webjars/font-awesome/5.14.0/css/all.min.css"/>-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--    <link rel="stylesheet" href="/webjars/bootstrap-datetimepicker/2.4.4/css/bootstrap-datetimepicker.min.css"/>-->
+    <script type="application/javascript" src="/webjars/jquery/3.5.1/jquery.min.js"></script>
+<!--    <script type="application/javascript"-->
+<!--            src="/webjars/bootstrap-datetimepicker/2.4.4/js/bootstrap-datetimepicker.min.js"></script>-->
+    <link href="/css/bootstrap-datetimepicker.min.css" rel="stylesheet" type="text/css" />
+    <script type="application/javascript" src="/webjars/momentjs/2.24.0/moment.js"></script>
+    <script src="/js/bootstrap-datetimepicker.min.js"></script>
+
+
+    <!--/*@thymesVar id="title" type="String"*/-->
+    <title th:text="${title}"></title>
+</head>
+
+<body class="bg-dark h-100">
+
+<h1>SIMPLE2</h1>
+<div class="container h-100 w-75">
+    <div class="row h-100 justify-content-center align-items-center">
+        <table>
+            <tr>
+                <td>Фпророро</td>
+                <td>rereeere</td>
+                <td>rereeere</td>
+                <td>rereeere</td>
+            </tr>
+
+        </table>
+        <input th:value="${@buildProperties.getVersion()}">
+
+    </div>
+    <form action="/index" method="post">
+        <input type="submit">
+    </form>
+
+</div>
+<!--/*@thymesVar id="error" type="string"*/-->
+<div th:if="${error}" th:text="${error}" class="alert alert-danger" role="alert">
+
+</div>
+<div class="container">
+    <h1>Date/Time Picker Component For Bootstrap 4 Demo</h1>
+    <div class="row">
+        <div class='col-sm-6'>
+            <input type='text' class="form-control" id='datetimepicker1' />
+        </div>
+
+    </div>
+</div>
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            locale: ru
+        });
+    });
+</script>
+</body>
+</html>

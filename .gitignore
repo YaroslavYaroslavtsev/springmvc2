@@ -1,0 +1,32 @@
+**/.gradle/
+**/build/
+**/log/
+**/out/
+*/sql/**/*.log
+
+**/src/test/resources/*-create_tables.sql
+
+#Результаты выполнения задачи createManifest
+*/manifest.mf
+*/lib/
+
+#Папка с рабочими файлами (например, JavaMelody и т.д.)
+*/work/
+
+#Настройки .idea
+.idea/*
+!.idea/.dev-mode
+!.idea/codeStyles
+.idea/codeStyles/*
+!.idea/codeStyles/codeStyleConfig.xml
+!.idea/codeStyles/Project.xml
+!.idea/inspectionProfiles/
+.idea/inspectionProfiles/*
+!.idea/inspectionProfiles/Project_Default.xml
+!.idea/fileTemplates/
+!.idea/runConfigurations/
+!.idea/codeInsightSettings.xml
+!.idea/encodings.xml
+!.idea/externalDependencies.xml
+!.idea/gradle.xml
+!.idea/misc.xml

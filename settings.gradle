@@ -1,0 +1,7 @@
+rootProject.name = 'struct'
+include 'shared'
+include 'order'
+include 'serial'
+include 'gradle-plugins'
+include 'agreg'
+
